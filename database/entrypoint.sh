@@ -1,17 +1,23 @@
 #!/bin/bash
+set -e
 
-# Start SQL Server
+echo "Starting SQL Server..."
 /opt/mssql/bin/sqlservr &
 
-# Wait for SQL Server to start
-echo "Waiting for SQL Server to start..."
-sleep 30s
+echo "Waiting for MSSQL to be ready..."
+for i in {1..30}; do
+  /opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -Q "SELECT 1" -No &> /dev/null
+  if [ $? -eq 0 ]; then
+    echo "MSSQL is ready!"
+    break
+  fi
+  echo "Attempt $i/30 — not ready yet, waiting 5s..."
+  sleep 5
+done
 
-# Run initialization script
-echo "Running database initialization..."
-/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "$SA_PASSWORD" -C -i /docker-entrypoint-initdb.d/init-db.sql
+echo "Running init-db.sql..."
+/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -i /init-db.sql -No
 
-echo "Database initialization completed!"
+echo "Database initialized!"
 
-# Keep container running
 wait

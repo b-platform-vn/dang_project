@@ -1,11 +1,6 @@
--- Wait for SQL Server to be ready
-WAITFOR DELAY '00:00:05';
-GO
-
--- Create database if not exists
 IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'AppDatabase')
 BEGIN
-    CREATE DATABASE AppDatabase;
+    CREATE DATABASE AppDatabase COLLATE Vietnamese_CI_AS;;
     PRINT 'Database AppDatabase created successfully';
 END
 ELSE

@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { typeOrmConfig } from './config/typeorm.config';
-import { UsersModule } from './modules/users/users.module';
+import { CustomersModule } from './customers/customers.module';
 
 @Module({
   imports: [
@@ -13,7 +13,7 @@ import { UsersModule } from './modules/users/users.module';
       envFilePath: '.env',
     }),
     TypeOrmModule.forRoot(typeOrmConfig),
-    UsersModule,
+    CustomersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
